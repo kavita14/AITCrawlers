@@ -9,9 +9,19 @@ import re
 import sys
 import uuid
 import os
+from common import parseAddress
+
+
+
+parseAddress("H-199 kalibari marg");
+exit()
+
+def process(line):
+    mystr = re.sub('\s+',' ',line)
+    return mystr
 
 #PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-DRIVER_BIN = "/Users/kavitasharma/Downloads/chromedriver"
+DRIVER_BIN = "/Users/mmt7546/Downloads/chromedriver"
 driver = webdriver.Chrome(DRIVER_BIN)
 urls=[]
 
@@ -46,16 +56,19 @@ for url in urls:
         print(property)
     property_address = sel.xpath('//*[starts-with(@class, "address-copy")]//span//text()').extract()
     print("property_address")
-    print(property_address)
+    parsed_address = [process(address_line) for address_line in property_address]
+    print(parsed_address)
 
     amentites = sel.xpath('//div[starts-with(@class, "amenities")]//li//text()').extract()
     print("amentites")
-    print(amentites)
+    parsed_emnties = [process(amenity_line) for amenity_line in amentites]
+    print(parsed_emnties)
 
     owner_detail = experience = sel.xpath('//div[@id="sellerModal"]//text()').extract()
 
     print("owner detail")
-    print(owner_detail)
+    parsed_emnties = [process(amenity_line) for amenity_line in owner_detail]
+    print(parsed_emnties)
 
     exit()
 
