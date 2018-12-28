@@ -1,29 +1,31 @@
 import mysql.connector
 
 def CreateDBConnection():
-    mydb = mysql.connector.connect(
-      host="localhost",
-      user="root",
-      passwd="technical",
-      database="web_extractor",
-      auth_plugin='mysql_native_password'
-    )
-    return mydb
-    #cur = conn.cursor()
+    connection = mysql.connector.connect(host='localhost',
+                             database='web_extractor',
+                             user='root',
+                             password='technical')
+    return connection
 
-def getPincodeData():
+def getSiteConfig():
+    connection = CreateDBConnection()
+    mycursor = connection.cursor()
+    mycursor.execute("SELECT * FROM site_config")
+    siteConfig = mycursor.fetchall()
+    return siteConfig
+
+def getZipcodeData():
     connection = CreateDBConnection()
     mycursor = connection.cursor()
     mycursor.execute("SELECT zip FROM zip_county")
-    myresult = mycursor.fetchall()
-    print("my result===")
-    print(myresult)
+    pincodes = mycursor.fetchall()
+    return pincodes
 
 def parseAddress(address):
     print("inside parse addrssss function")
     print(address)
 
-def parsePhone(phone):
+def parsePhoneNo(phone):
     print(phone)
 
 def saveOwnerDetail(owner_detail):

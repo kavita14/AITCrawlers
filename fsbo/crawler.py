@@ -15,12 +15,11 @@ def process(line):
     return mystr
 
 #PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-def crawl():
+def crawl(DRIVER_BIN,site_url,site_config):
     #DRIVER_BIN = "../chromedriver"
-    DRIVER_BIN = "/Users/kavitasharma/Downloads/chromedriver"
     driver = webdriver.Chrome(DRIVER_BIN)
     urls=[]
-    driver.get('https://fsbo.com/listings/search/')
+    driver.get(site_url)
     username = driver.find_element_by_name('state')
     username.send_keys('Alaska')
     sleep(2)
