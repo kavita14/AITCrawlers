@@ -1,15 +1,28 @@
 import common.common as commModule
 import fsbo.crawler as fsbo
+import forsalebyowner.crawler as salebyowner
+import usaddress
+from nameparser import HumanName
 
-site_id = input("Please Select Crawler for Exceution:\n 1. Enter 1 for FSBO.com \n 2. Enter 2 for PDCTN.com \n Enter 0 to run All\n")
-#site_id=int(site_id)
-print(site_id)
-print(type(site_id))
+DRIVER_BIN = "/Users/kavitasharma/Downloads/chromedriver"
+
+site_id = input("Please Select Crawler for Exceution:\n Enter 1 for FSBO.com \n Enter 2 for PDCTN.com \n Enter 0 to run All\n")
 if site_id == 1:
-    DRIVER_BIN = "/Users/kavitasharma/Downloads/chromedriver"
     site_url = "https://fsbo.com/listings/search/"
     site_config = commModule.getSiteConfig();
-    fsbo.crawl(DRIVER_BIN,site_url,site_config)
+    data_from_fsbo = fsbo.crawl(DRIVER_BIN,site_url,site_config)
+    for fsbo in data_from_fsbo:
+        fsbo["propertyAddress"] = usaddress.parse(fsbo["propertyAddress"])
+        fsbo["propertyAddress"] = commModule.convertTupletoDict(fsbo["propertyAddress"])
+        #fsbo["ownerName"] = HumanName(fsbo["ownerName"])
+    commModule.savePropertyAddress(data_from_fsbo)
 
 elif site_id == 2:
-    print("Crawler is not ready yet!")
+    site_url = "https://www.forsalebyowner.com/search/list/tennessee/proximity,desc-sort"
+    site_config = commModule.getSiteConfig();
+    data_from_salebyowner = salebyowner.crawl(DRIVER_BIN,site_url,site_config)
+    for salebyowner in data_from_salebyowner:
+        salebyowner["propertyAddress"] = usaddress.parse(salebyowner["propertyAddress"])
+        salebyowner["propertyAddress"] = commModule.convertTupletoDict(salebyowner["propertyAddress"])
+        #fsbo["ownerName"] = HumanName(fsbo["ownerName"])
+    commModule.savePropertyAddress(data_from_salebyowner)
